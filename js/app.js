@@ -13,8 +13,8 @@ import { createMapView } from "./mapview.js";
 
 // Route colours live here rather than in CSS because the map is drawn on a canvas.
 const MAP_COLOURS = {
-  dark: { hex: "#a9c79b", hexOpacity: 0.12, played: "#e0876a", current: "#a9c79b", track: "rgba(255,255,255,0.6)", casing: "#0c0f0d" },
-  light: { hex: "#2f4a2c", hexOpacity: 0.08, played: "#b8553a", current: "#93b483", track: "rgba(20,26,20,0.55)", casing: "#fbfcf8" },
+  dark: { hex: "#b6d4a8", hexOpacity: 0.12, played: "#d38e77", current: "#b6d4a8", track: "rgba(255,255,255,0.6)", casing: "#0c0f0d" },
+  light: { hex: "#2f4a2c", hexOpacity: 0.08, played: "#ab5c47", current: "#a5c595", track: "rgba(20,26,20,0.55)", casing: "#fbfcf8" },
 };
 // How close the map comes for a place: about 115 m a pixel, a town's width.
 const PLACE_METRES_PER_PIXEL = 115;

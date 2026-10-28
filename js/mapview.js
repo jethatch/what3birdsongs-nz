@@ -27,7 +27,7 @@ function routeStyles(colours) {
     new ol.style.Stroke({ color: ol.color.asString([...ol.color.asArray(color).slice(0, 3), opacity * (ol.color.asArray(color)[3] ?? 1)]), width, lineCap: "round", lineJoin: "round" });
   return {
     stop: new ol.style.Style({ fill: fill(colours.hex, colours.hexOpacity), stroke: stroke(colours.hex, 1.4, 0.9) }),
-    played: new ol.style.Style({ fill: fill(colours.played, 0.34), stroke: stroke(colours.hex, 1.4, 0.9) }),
+    played: new ol.style.Style({ fill: fill(colours.played, 0.24), stroke: stroke(colours.hex, 1.4, 0.9) }),
     current: new ol.style.Style({ fill: fill(colours.current, 0.7), stroke: stroke(colours.hex, 2.5) }),
     track: [
       new ol.style.Style({ stroke: stroke(colours.casing, 6, 0.6) }),
