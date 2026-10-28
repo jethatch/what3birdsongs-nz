@@ -1,0 +1,4 @@
+# Local only: never commit keys.
+js/linz-key.local.js
+__pycache__/
+.DS_Store

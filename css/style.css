@@ -1,0 +1,1190 @@
+:root {
+  --font-ui: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Archivo Black", "Archivo", Impact, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --panel-width: 372px;
+  --radius: 6px;
+
+  --bg: #0c0f0d;
+  --panel: #121713;
+  --card: #182019;
+  --field: #212a23;
+  --line: #2d3830;
+  --ink: #eef2ea;
+  --muted: #9faa9c;
+  --accent: #a9c79b;
+  --accent-ink: #0f170f;
+  --hot: #e0876a;
+  --pin-a: #5fb0c8;
+  --pin-b: #e0876a;
+  --danger: #ff7b72;
+  --deck: rgba(16, 21, 17, 0.92);
+  --map: #0d100e;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="light"] {
+  --bg: #e3e8df;
+  --panel: #eef2ea;
+  --card: #fbfcf8;
+  --field: #eef2ea;
+  --line: #c9d2c4;
+  --ink: #141a14;
+  --muted: #5b665a;
+  --accent: #93b483;
+  --accent-ink: #121a10;
+  --hot: #b8553a;
+  --pin-a: #1f7a96;
+  --pin-b: #b8553a;
+  --danger: #b3261e;
+  --deck: rgba(251, 252, 248, 0.94);
+  --map: #f7f9f5;
+  --shadow: 0 8px 30px rgba(15, 30, 15, 0.18);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 15px/1.45 var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration-color: var(--hot); text-underline-offset: 2px; }
+a:hover { color: var(--hot); }
+code { font: 500 0.92em var(--font-mono); }
+h1, h2, h3, p { margin: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+:root[data-theme="light"] :focus-visible { outline-color: var(--hot); }
+
+/* ------------------------------------------------------------------ layout */
+
+#app {
+  display: grid;
+  grid-template-columns: var(--panel-width) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+}
+
+#panel {
+  grid-column: 1;
+  grid-row: 1;
+  /* Positioned, so the hidden inputs inside it (see .segmented)
+     scroll with it and can't make the page itself scrollable. */
+  position: relative;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  padding: 18px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#stage {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  min-height: 0;
+}
+
+#map {
+  position: absolute;
+  inset: 0;
+  /* shows through while a basemap is loading or being swapped */
+  background: var(--map);
+}
+
+#deck {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+  z-index: 3;
+  margin: 0 12px 30px;
+  background: var(--deck);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------- masthead */
+
+.masthead-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+h1 {
+  font: 400 27px/1 var(--font-display);
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+}
+h1 span {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 2px 7px 3px;
+  margin-left: 2px;
+  transform: rotate(-2.5deg);
+}
+
+.masthead-actions { display: flex; gap: 6px; }
+
+.tagline {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.icon-button {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+  font: 700 15px var(--font-ui);
+  cursor: pointer;
+}
+/* A word where there is no icon for it. */
+.icon-button:hover:not(:disabled) { border-color: var(--ink); }
+.icon-button:disabled { opacity: 0.4; cursor: default; }
+.icon-button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ------------------------------------------------------------------- cards */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+h2 {
+  font: 400 15px/1 var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.step {
+  width: 22px;
+  height: 22px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--card);
+  font-size: 12px;
+}
+
+.places {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.place label,
+.field,
+.choice legend {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.place label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.pin {
+  width: 18px;
+  height: 18px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #0c0f0d;
+  font: 700 11px var(--font-ui);
+}
+.pin-a { background: var(--pin-a); }
+.pin-b { background: var(--pin-b); }
+:root[data-theme="light"] .pin { color: #fff; }
+
+.place-row {
+  display: flex;
+  gap: 6px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--field);
+  color: var(--ink);
+  font: 500 15px var(--font-ui);
+}
+select { cursor: pointer; }
+input::placeholder { color: var(--muted); opacity: 0.7; }
+
+.button {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: var(--card);
+  font: 600 14px var(--font-ui);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.button:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.button:disabled { opacity: 0.55; cursor: progress; }
+.button.quiet {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+.button.quiet:hover:not(:disabled) { background: transparent; border-color: var(--ink); color: var(--ink); }
+
+/* Sits at the right-hand end of the "End" label's line. */
+.swap {
+  align-self: flex-end;
+  width: 34px;
+  height: 26px;
+  margin-bottom: -26px;
+  position: relative;
+  z-index: 1;
+}
+
+.place-status {
+  min-height: 0;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.place-status:empty { display: none; }
+.place-status.error { color: var(--danger); }
+
+.candidates { margin-top: 4px; }
+.candidates:empty { display: none; }
+.candidates summary {
+  font-size: 12.5px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 0;
+}
+.candidates summary:hover { color: var(--ink); }
+.candidate {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink);
+  font: 400 13px/1.3 var(--font-ui);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.candidate:hover { background: var(--field); }
+
+.hint, .explain, .fine, .legend {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--hot);
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.link:hover { color: var(--hot); }
+
+.choice {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+/* Safari gives a legend a layout of its own: a fieldset in a flex column
+   grows by the height of its legend, and a grid set on the fieldset puts
+   its rows below the box. A floated legend is an ordinary block again. */
+.choice legend { float: left; width: 100%; padding: 0; margin-bottom: 5px; }
+.choice legend + * { clear: both; }
+
+.segmented {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--field);
+  padding: 2px;
+  gap: 2px;
+}
+.segmented label { flex: 1; position: relative; cursor: pointer; }
+.segmented input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.segmented span {
+  display: block;
+  padding: 6px 4px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.segmented label:hover span { color: var(--ink); }
+.segmented input:checked + span {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.segmented input:focus-visible + span {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+.explain {
+  margin-top: 7px;
+  padding-left: 9px;
+  border-left: 2px solid var(--accent);
+  color: var(--ink);
+  opacity: 0.86;
+}
+
+.summary {
+  padding: 9px 10px;
+  border-radius: var(--radius);
+  background: var(--field);
+  font-size: 13.5px;
+}
+.summary:empty { display: none; }
+.summary strong { font-weight: 700; }
+.summary .note { display: block; margin-top: 4px; color: var(--danger); }
+.summary.busy::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 7px;
+  border: 2px solid var(--muted);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.field select,
+.field > input { margin-top: 5px; }
+
+input[type="range"] {
+  width: 100%;
+  height: 36px;
+  margin: 0;
+  background: transparent;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+:root[data-theme="light"] input[type="range"] { accent-color: var(--hot); }
+
+.credits {
+  font-size: 12.5px;
+  color: var(--muted);
+  padding: 0 2px;
+}
+
+/* ------------------------------------------------- sections that fold away */
+
+.plain {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.plain:disabled { opacity: 0.45; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.more {
+  border-top: 1px solid var(--line);
+  margin: 0 -14px;
+  padding: 0 14px;
+}
+.more + .more { margin-top: -12px; }
+.more:last-child { margin-bottom: -14px; }
+.more summary {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 11px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.more summary::-webkit-details-marker { display: none; }
+.more summary::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-right: -2px;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: translateY(-2px) rotate(-45deg);
+  transition: transform 0.15s;
+}
+.more[open] summary::before { transform: translateY(-3px) rotate(45deg); }
+.more-title {
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.more-now {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  font-size: 13px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.more summary:hover .more-now { color: var(--ink); }
+.more-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 2px 0 14px;
+}
+
+.field.inline { flex: 1; min-width: 0; }
+.field.inline select { margin-top: 0; }
+
+select:disabled { opacity: 0.45; cursor: default; }
+
+/* ------------------------------------------------------------ live session */
+
+.live {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.live-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.live-button {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.live-button:disabled { cursor: default; }
+.live-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--hot);
+}
+.live-button.on { border-color: var(--hot); }
+.live-button.on .live-dot { animation: pulse 1.2s ease-in-out infinite; }
+.live-pitch, .live-note { font-size: 13px; color: var(--muted); }
+.live-status { font-size: 13.5px; }
+.live-status:empty { display: none; }
+.live-status.error { color: var(--danger); }
+.live-download {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+.live-download[hidden] { display: none; }
+
+/* -------------------------------------------------------------------- deck */
+
+.progress {
+  height: 3px;
+  background: var(--line);
+}
+#progress-bar {
+  height: 100%;
+  width: 0;
+  background: var(--hot);
+}
+
+.deck-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+}
+
+.transport {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.play {
+  width: 52px;
+  height: 52px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+.play:hover:not(:disabled) { transform: scale(1.05); }
+.play:disabled { background: var(--field); color: var(--muted); cursor: default; }
+.play svg { width: 26px; height: 26px; fill: currentColor; }
+.play .icon-pause { display: none; }
+.play.playing .icon-pause { display: block; }
+.play.playing .icon-play { display: none; }
+.play.busy { animation: pulse 0.9s ease-in-out infinite; }
+
+.deck-info {
+  flex: 1 1 170px;
+  min-width: 0;
+}
+.deck-title {
+  font: 400 16px/1.2 var(--font-display);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.deck-sub {
+  margin-top: 3px;
+  font: 500 12.5px var(--font-mono);
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.now {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+.now:empty { display: none; }
+
+.deck-actions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon-button.busy {
+  color: transparent;
+  position: relative;
+  pointer-events: none;
+}
+.icon-button.busy::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 2px solid var(--muted);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.follow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.follow input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+
+.chart {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0 14px 10px;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+.chart:empty { display: none; }
+.chart button {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink);
+  font: 500 12px var(--font-mono);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.chart button:hover { border-color: var(--ink); }
+.chart .n {
+  font-size: 10px;
+  color: var(--muted);
+}
+.chart .c { opacity: 0.8; }
+.chart .c + .c::before {
+  content: "|";
+  margin-right: 7px;
+  opacity: 0.35;
+}
+.chart li.played button { border-color: transparent; background: color-mix(in srgb, var(--hot) 22%, transparent); }
+.chart li.current button { border-color: var(--accent); }
+.chart li.current .c.on {
+  opacity: 1;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin: 0 -4px;
+}
+.chart li.current .c.on + .c::before,
+.chart li.current .c + .c.on::before { content: none; }
+.chart li.current .c.on + .c { margin-left: 7px; }
+.chart li.current .c + .c.on { margin-left: 3px; }
+
+/* --------------------------------------------------------------------- map */
+
+.marker-pin {
+  width: 30px;
+  height: 38px;
+  cursor: grab;
+  touch-action: none; /* the finger drags the pin, not the page or map */
+}
+.marker-pin svg { display: block; width: 30px; height: 38px; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45)); }
+.marker-pin text { font: 700 13px var(--font-ui); fill: #0c0f0d; }
+.marker-pin.a path { fill: var(--pin-a); }
+.marker-pin.b path { fill: var(--pin-b); }
+:root[data-theme="light"] .marker-pin text { fill: #fff; }
+
+.playhead {
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+}
+.playhead .pick {
+  width: 26px;
+  height: 26px;
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.6));
+}
+.playhead .pick path {
+  fill: var(--accent);
+  stroke: #0c0f0d;
+  stroke-width: 1.6;
+}
+.playhead.hit .pick { animation: hit 0.16s ease-out; }
+
+.playhead.live .pick path { fill: var(--hot); }
+
+#arrival {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 0 16px 120px;
+  pointer-events: none;
+}
+#arrival[hidden] { display: none; }
+.arrival-box {
+  pointer-events: auto;
+  position: relative;
+  max-width: 100%;
+  min-width: 0;
+}
+.arrival-close {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+  font: 700 15px/1 var(--font-ui);
+  cursor: pointer;
+}
+.arrival-play {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 100%;
+  padding: 14px 22px 14px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  text-align: left;
+}
+.arrival-play:hover { transform: scale(1.03); }
+.arrival-play svg { flex: none; width: 34px; height: 34px; fill: currentColor; }
+.arrival-play > span { display: grid; min-width: 0; }
+.arrival-play strong { font: 400 20px/1.15 var(--font-display); }
+.arrival-play span span {
+  font: 500 13px var(--font-ui);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The spot pop-up (an OpenLayers overlay; see js/mapview.js). */
+.w3b-popup { position: relative; width: min(340px, calc(100vw - 40px)); }
+.w3b-popup-content {
+  position: relative;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 12px;
+  font-family: var(--font-ui);
+}
+.w3b-popup-tip {
+  width: 0;
+  height: 0;
+  margin: -1px auto 0;
+  border: 10px solid transparent;
+  border-bottom: 0;
+  border-top-color: var(--card);
+}
+.w3b-popup-close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 18px;
+  cursor: pointer;
+}
+.w3b-popup-close:hover { color: var(--ink); }
+
+/* OpenLayers' controls, in the page's colours. */
+#map .ol-zoom, #map .w3b-locate { left: auto; right: 10px; }
+#map .ol-zoom { top: 10px; }
+#map .w3b-locate { top: 74px; }
+#map .ol-control { background: transparent; padding: 0; }
+#map .ol-control button {
+  width: 32px;
+  height: 32px;
+  margin: 0 0 2px;
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  font: 600 18px/1 var(--font-ui);
+}
+#map .ol-control button:hover, #map .ol-control button:focus-visible { background: var(--field); outline: none; }
+#map .w3b-locate svg { width: 18px; height: 18px; fill: currentColor; stroke: currentColor; stroke-width: 2; }
+#map .w3b-locate button.busy { animation: pulse 1s ease-in-out infinite; }
+#map .ol-attribution { right: 6px; bottom: 6px; max-width: calc(100% - 20px); }
+#map .ol-attribution ul { color: var(--ink); text-shadow: none; font-size: 11px; }
+#map .ol-attribution:not(.ol-collapsed) { background: var(--deck); }
+#map .ol-attribution a { color: inherit; }
+@keyframes pulse { 50% { opacity: 0.4; } }
+
+/* LINZ has no dark style: the dark theme dims the lighter one. Only the
+   basemap draws on canvases classed ol-layer (and its sea colour on
+   ol-mapbox-style-background); the route layers draw on their own
+   (w3b-overlay), so their colours stay true. */
+:root[data-theme="dark"] #map .ol-layer,
+:root[data-theme="dark"] #map .ol-mapbox-style-background,
+:root[data-theme="dark"] #inset .ol-layer,
+:root[data-theme="dark"] #inset .ol-mapbox-style-background {
+  filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.88) saturate(0.55);
+}
+
+/* The Chatham Islands inset. */
+#inset {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 168px;
+  height: 140px;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--map);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  z-index: 2;
+}
+#inset[hidden] { display: none; }
+#inset:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+#inset .inset-label {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 4px;
+  z-index: 3;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--deck);
+  color: var(--ink);
+  font: 600 11px/1.25 var(--font-ui);
+  pointer-events: none;
+}
+body.no-map #inset { display: none; }
+
+/* Section 1 until a set of birds is chosen. */
+#birdset.unchosen { border-color: var(--accent); }
+#birdset.attention { animation: attention 0.9s ease-out 2; }
+@keyframes attention { 30% { box-shadow: 0 0 0 4px var(--accent); } }
+
+.spot-title {
+  font: 500 12px var(--font-mono);
+  color: var(--muted);
+  margin: 0 22px 8px 0;
+}
+.spot-birds { display: flex; gap: 6px; }
+.spot-birds .bird-card { flex: 1; width: auto; min-width: 0; background: var(--field); }
+.spot-birds .bird-card.on { background: var(--accent); }
+.spot-quiet { font-size: 13.5px; color: var(--muted); max-width: 260px; }
+.spot-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+.spot-actions .button {
+  flex: 1;
+  height: 32px;
+  padding: 0 8px;
+  font-size: 13px;
+}
+
+/* In place of the map, in a browser that can't draw one. */
+#map-missing {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(420px, calc(100% - 32px));
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  font-size: 14.5px;
+}
+#map-missing[hidden] { display: none; }
+#map-missing p + p { margin-top: 8px; }
+#map-missing .fine { color: var(--muted); font-size: 13px; }
+.no-map #map,
+.no-map .with-map,
+.no-map .follow { display: none; }
+
+#toast {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  max-width: min(480px, calc(100% - 110px));
+  padding: 9px 14px;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: var(--card);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow);
+}
+
+/* ------------------------------------------------------- loading and dialog */
+
+#loading {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  transition: opacity 0.3s;
+}
+#loading.done { opacity: 0; pointer-events: none; }
+.loading-box { text-align: center; font: 400 18px var(--font-display); max-width: 320px; padding: 0 20px; }
+.loading-box .button { margin-top: 14px; }
+.loading-pick {
+  width: 34px;
+  height: 40px;
+  margin: 0 auto 14px;
+  background: var(--accent);
+  clip-path: path("M17 40C8 31 0 21 0 12A17 12 0 0 1 34 12C34 21 26 31 17 40Z");
+  animation: pulse 0.9s ease-in-out infinite;
+}
+#loading.failed .loading-pick { animation: none; background: var(--danger); }
+
+dialog {
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
+dialog h2 { font-size: 22px; text-transform: none; letter-spacing: 0; margin-bottom: 4px; }
+dialog h3 { font: 700 15px var(--font-ui); margin: 16px 0 4px; }
+dialog p, dialog li { font-size: 14.5px; }
+dialog ul { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 6px; }
+dialog p + p { margin-top: 10px; }
+dialog h2 + p { margin-top: 8px; }
+dialog cite { font-style: italic; }
+dialog .fine { margin-top: 8px; }
+.dialog-close { position: absolute; top: 14px; right: 14px; font-size: 20px; }
+dialog.small { width: min(420px, calc(100vw - 32px)); }
+dialog.small input { margin-top: 12px; font: 500 13px var(--font-mono); }
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+.dialog-actions .button[hidden] { display: none; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 50% { opacity: 0.45; } }
+@keyframes hit {
+  0% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+/* ------------------------------------------------------------------ narrow */
+
+/* Not enough room for the title beside the bird cards: give the cards
+   their own row. */
+@media (max-width: 1240px) {
+  .deck-main { flex-wrap: wrap; row-gap: 8px; }
+  .deck-actions { order: 4; }
+  .now { order: 5; flex: 1 1 100%; }
+  .now .bird-card { flex: 1; width: auto; min-width: 0; }
+}
+
+@media (max-width: 820px) {
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 100dvh;
+  }
+  #panel { display: contents; }
+  .masthead, #birdset, #trip, #sound, .credits { margin: 0 12px; }
+  .masthead { order: 1; margin-top: 14px; }
+  #birdset { order: 2; margin-top: 12px; }
+  #trip { order: 3; margin-top: 12px; }
+  #stage { order: 4; height: 58vh; min-height: 340px; margin-top: 12px; }
+  .no-map #stage { height: auto; min-height: 0; }
+  .no-map #map-missing { position: static; transform: none; width: auto; margin: 0 12px; }
+  #sound { order: 5; margin-top: 12px; }
+  .credits { order: 6; margin-top: 12px; margin-bottom: 14px; }
+  #deck {
+    order: 7;
+    align-self: stretch;
+    position: sticky;
+    bottom: 0;
+    margin: 0;
+    border-radius: 0;
+    border-width: 1px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .deck-main { gap: 10px; padding: 8px 12px; }
+  .play { width: 46px; height: 46px; }
+  .deck-info { flex-basis: 120px; }
+  .deck-title { font-size: 15px; }
+  .deck-sub { white-space: normal; }
+  /* The map is down the page on a phone, so the prompt floats above the
+     player where it can't be missed. */
+  #arrival {
+    position: fixed;
+    inset: auto 0 calc(170px + env(safe-area-inset-bottom)) 0;
+    padding: 0 12px;
+    z-index: 5;
+  }
+  .arrival-play strong { font-size: 18px; }
+  /* Smaller birds on a phone. */
+  .now .bird-card img, .now .bird-card .no-photo { height: 52px; }
+  .now .bird-card .name { font-size: 11.5px; }
+  .chart { padding: 0 12px 8px; }
+  input[type="text"], input[type="number"], select { font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playhead.hit .pick, .play.busy, .loading-pick { animation: none; }
+  .play:hover:not(:disabled) { transform: none; }
+}
+
+/* ------------------------------------------------------------------- birds */
+
+.bird-card {
+  width: 116px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--ink);
+  text-align: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s;
+}
+.bird-card img, .bird-card .no-photo {
+  display: block;
+  width: 100%;
+  height: 70px;
+  object-fit: cover;
+  background: var(--field);
+}
+.bird-card .name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding: 4px 6px 5px;
+  font: 600 12.5px/1.25 var(--font-ui);
+}
+.bird-card .name-en {
+  display: block;
+  margin-top: -3px;
+  padding: 0 6px 5px;
+  font: 500 10.5px/1.2 var(--font-ui);
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bird-card.on .name-en { color: inherit; opacity: 0.8; }
+.bird-card:hover { border-color: var(--ink); }
+.bird-card:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.bird-card.on {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.now-quiet {
+  max-width: 300px;
+  font-size: 13px;
+  color: var(--muted);
+  align-self: center;
+}
+.chart .c { max-width: 11em; overflow: hidden; text-overflow: ellipsis; }
+.chart .c.quiet { font-style: italic; }
+
+.bird-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-right: 28px;
+}
+.bird-head img {
+  flex: none;
+  width: 92px;
+  height: 92px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  background: var(--field);
+}
+.bird-head h2 { margin: 0; }
+.bird-sci { margin-top: 2px; font-style: italic; color: var(--muted); }
+.bird-credits { margin: 14px 0 0; }
+.bird-credits dt {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.bird-credits dd { margin: 2px 0 0; font-size: 14.5px; }
+.bird-sono { margin: 14px 0 0; }
+.bird-sono img {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius);
+  background: #fff;
+}
+.bird-sono figcaption { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+.download-links { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start; }
+.download-links .button { display: inline-flex; align-items: center; text-decoration: none; }
