@@ -228,6 +228,7 @@
   <dialog id="notice" class="small" aria-labelledby="notice-title">
     <h2 id="notice-title">Experimental build</h2>
     <p>This is an experimental build and is undergoing review.</p>
+    <p class="fine"><button type="button" class="link" id="notice-disclaimer">Read the disclaimer</button> (a draft, to be reviewed and updated).</p>
     <div class="dialog-actions">
       <button type="button" class="button" id="notice-ok">OK</button>
     </div>
@@ -305,7 +306,7 @@
       <li><strong>Hex walk</strong> is greedy local routing: at every hexagon, step to the neighbour nearest the destination. It runs entirely in your browser and cheerfully crosses water.</li>
       <li><strong>Follow roads</strong> asks the public <a href="https://project-osrm.org/" target="_blank" rel="noopener">OSRM</a> demo server for a driving route and collects the hexagons along it. If the server is down, no road connects the two places, or a pin is far from any road, you get the walk instead.</li>
     </ul>
-    <p>Stops beyond the islands, well out at sea, have no birds; nor do places with fewer than three birds of the chosen set. Each takes one short quiet turn.</p>
+    <p>Stops beyond the islands, well out at sea, have no birds: each plays one turn of waves instead. Places with fewer than three birds of the chosen set take one quiet turn.</p>
     <h3>Playing it</h3>
     <p>Each stop plays its three birds in turn, or all together. The pace sets how long each turn lasts. Press play (or the space bar), and select any stop in the chart to jump there.</p>
     <p>The share button copies a link that opens this trip with this sound. The download button saves the song as a WAV file, with a text file of credits, when the recordings’ licences allow them to be mixed into one file.</p>
@@ -314,9 +315,20 @@
     <p><strong>Go live</strong> follows your location instead of a planned route. The hexagon you are in plays its birds round and round until you cross into the next. Hexagons are about 50 m across on foot and larger when you travel faster, because a phone’s sense of where it is wanders by several metres.</p>
     <p>The page keeps the screen awake while a session runs, because a web page cannot keep playing once the phone locks. When you end the session the route becomes an ordinary trip you can replay, and a recording of what you heard can be downloaded, licences permitting. None of it is kept once you close the page.</p>
     <p>This page does not send your location anywhere, and a link to a travelled route is only made if you press share and agree. It does talk to other services: the map loads its tiles from LINZ Basemaps for wherever it is showing (including where you are, in a live session); place search sends what you type to Nominatim or Photon; “Follow roads” sends the start and end to the OSRM server; the page’s fonts and libraries come from Google Fonts and jsDelivr; and a bird’s sonogram is loaded from xeno-canto when you open its credits.</p>
+    <h3 id="disclaimer">Disclaimer</h3>
+    <p class="fine"><strong>Draft, to be reviewed and updated.</strong> Written by Claude, Anthropic’s AI model, for the authors to revise.</p>
+    <ul>
+      <li><strong>An experiment, not a field guide.</strong> This is an experimental artwork. Don’t use it to identify birds, plan birding, or make any decision.</li>
+      <li><strong>Birds come from a model.</strong> Which birds a place gets comes from a computer model of where species may be found (iNaturalist’s range maps), then picked by arithmetic on the place’s address. Neither says what actually lives there or how common it is. The model is generous, has no seasons, and is kept as published, pending review.</li>
+      <li><strong>Recordings chosen by code.</strong> Each bird is heard in one recording, often made far away, chosen and cut automatically and not checked by ear. Species are matched between iNaturalist and xeno-canto by name, sometimes across different taxonomies, so a few birds may be mismatched.</li>
+      <li><strong>Other people’s work.</strong> Recordings and photos belong to the people who made them and are used under their Creative Commons licences, as credited. Range maps are used under CC BY 4.0, as stated in their published listing. Sonograms are shown from xeno-canto, on xeno-canto’s terms.</li>
+      <li><strong>Taonga and names.</strong> Native birds, many of them taonga, are included only as species, names, ranges and recordings, with no mātauranga Māori. Te reo Māori names follow iNaturalist and may not match local usage.</li>
+      <li><strong>The map.</strong> The basemap is LINZ’s, CC BY 4.0. The Chatham Islands label is not an official name.</li>
+      <li><strong>Not yet reviewed.</strong> Much of the text and all of the code were written by Claude and are still being reviewed by the project’s authors.</li>
+    </ul>
     <h3>Credits</h3>
     <p class="fine">Preview: the explanatory text on this page was written by Claude, Anthropic’s AI model, while building it. It has not yet been reviewed.</p>
-    <p class="fine">Bird recordings from <a href="https://xeno-canto.org/" target="_blank" rel="noopener">xeno-canto</a>, each under its recordist’s Creative Commons licence, cut and re-encoded here. Bird photos from <a href="https://www.inaturalist.org/" target="_blank" rel="noopener">iNaturalist</a>, each under its photographer’s licence. Range maps from iNaturalist’s open range map dataset (<span id="geomodel-version">geomodel</span>, CC BY 4.0). Names in te reo Māori and English follow iNaturalist.</p>
+    <p class="fine">Bird recordings from <a href="https://xeno-canto.org/" target="_blank" rel="noopener">xeno-canto</a>, each under its recordist’s Creative Commons licence, cut and re-encoded here. Bird photos from <a href="https://www.inaturalist.org/" target="_blank" rel="noopener">iNaturalist</a>, each under its photographer’s licence. Range maps from iNaturalist’s open range map dataset (<span id="geomodel-version">geomodel</span>, CC BY 4.0). Waves for stops out at sea: “<a href="https://commons.wikimedia.org/wiki/File:Ocean_Waves_on_a_Tropical_Beach.ogg" target="_blank" rel="noopener">Ocean Waves on a Tropical Beach</a>” by Jarrod Stanley, CC0, from Wikimedia Commons; a generic recording, not made on these coasts. Names in te reo Māori and English follow iNaturalist.</p>
     <p class="fine">Grown out of <a href="https://jethatch.github.io/what3chords-songs/" target="_blank" rel="noopener">what3chords songs</a>, a recreation of the original <a href="https://github.com/DOSull/what3chords" target="_blank" rel="noopener">what3chords</a> by David O’Sullivan, Luke Bergmann, Jim Thatcher and Nick Lally.</p>
     <h3>The map</h3>
     <p>The map is drawn in NZTM2000, New Zealand’s own map projection, from <a href="https://basemaps.linz.govt.nz/" target="_blank" rel="noopener">LINZ Basemaps</a>. The Chatham Islands sit about 800 km east of the mainland, so they are shown in a box in the corner; select it to go there. Because the projection is centred on the mainland, the Chathams appear turned a little. Their label gives the English name with the Moriori name, Rēkohu, and the Māori name, Wharekauri; this is not an official dual name.</p>
@@ -360,7 +372,7 @@
         } catch (e) { tried = true; }
         if (tried) return fail();
         // Keep this list in step with the files in js/.
-        var scripts = ["app", "audio", "basemap", "birds", "geocode", "grid", "licences", "link", "live", "mapview", "routing"];
+        var scripts = ["app", "audio", "basemap", "birds", "geocode", "grid", "licences", "linz-key", "link", "live", "mapview", "routing"];
         Promise.all(scripts.map(function (name) {
           return fetch("./js/" + name + ".js", { cache: "reload" }).catch(function () {});
         })).then(function () { location.reload(); });

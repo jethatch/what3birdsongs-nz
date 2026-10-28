@@ -22,11 +22,11 @@ const STYLES = {
   light: "topographic-v2",
   dark: "topolite-v2",
 };
-// The key lives in a git-ignored file (see README). Loaded lazily, so that
+// The key is in js/linz-key.js (see README). Loaded lazily, so that
 // without it only the basemap is missing, not the whole page.
 let key = null;
 async function styleUrl(theme) {
-  if (!key) key = (await import("./linz-key.local.js")).LINZ_KEY;
+  if (!key) key = (await import("./linz-key.js")).LINZ_KEY;
   return `https://basemaps.linz.govt.nz/v1/styles/${STYLES[theme]}.json?api=${key}&tileMatrix=NZTM2000Quad`;
 }
 

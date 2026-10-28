@@ -909,7 +909,9 @@ select:disabled { opacity: 0.45; cursor: default; }
 }
 body.no-map #inset { display: none; }
 
-/* Section 1 until a set of birds is chosen. */
+/* Section 1 until a set of birds is chosen, and Play meanwhile. */
+.play.needs-set { opacity: 0.45; filter: saturate(0.3); }
+.play.needs-set:hover { opacity: 0.6; }
 #birdset.unchosen { border-color: var(--accent); }
 #birdset.attention { animation: attention 0.9s ease-out 2; }
 @keyframes attention { 30% { box-shadow: 0 0 0 4px var(--accent); } }

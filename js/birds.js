@@ -129,6 +129,17 @@ function localBirds(cell4) {
   return list;
 }
 
+// Whether a cell (resolution 4 or finer) is inside the mapped area, once
+// prepareCells() has fetched its tile. Outside it is out at sea (or beyond
+// the area's land).
+export function inArea(cell) {
+  const cell4 = h3.cellToParent(cell, LOCAL_RES);
+  const tile = tileOf(cell4);
+  if (!catalogue.tiles.has(tile)) return false;
+  const cells = loaded.get(tile);
+  return Boolean(cells && cells[cell4]);
+}
+
 // The place's number within its resolution-4 hexagon: below LOCAL_BOUND.
 function localNumber(cell15) {
   const bits = BigInt("0x" + cell15);

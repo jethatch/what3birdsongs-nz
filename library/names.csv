@@ -16,13 +16,13 @@ Alectoris rufa,,Red-legged Partridge,yes,yes
 Alisterus scapularis,,Australian King Parrot,yes,yes
 Ammodramus savannarum,,Grasshopper Sparrow,,yes
 Anarhynchus bicinctus,Pohowera,Banded Dotterel,,
-Anarhynchus collaris,,Collared Plover,,
+Anarhynchus collaris,,Collared Plover,,yes
 Anarhynchus frontalis,Ngutu Pare,Wrybill,,yes
-Anarhynchus leschenaultii,,Greater Sand Plover,,
-Anarhynchus nivosus,,Snowy Plover,,
+Anarhynchus leschenaultii,,Greater Sand Plover,,yes
+Anarhynchus nivosus,,Snowy Plover,,yes
 Anarhynchus obscurus,,New Zealand Dotterel,,
-Anarhynchus ruficapillus,,Red-capped Plover,,
-Anarhynchus veredus,,Oriental Plover,,
+Anarhynchus ruficapillus,,Red-capped Plover,,yes
+Anarhynchus veredus,,Oriental Plover,,yes
 Anas acuta,,Northern Pintail,,yes
 Anas castanea,,Chestnut Teal,,yes
 Anas chlorotis,Pāteke,Brown Teal,,yes
@@ -70,7 +70,7 @@ Bartramia longicauda,,Upland Sandpiper,,yes
 Biziura lobata,,Musk Duck,,yes
 Bombycilla cedrorum,,Cedar Waxwing,,yes
 Bombycilla garrulus,,Bohemian Waxwing,,yes
-Botaurus dubius,,Black-backed Bittern,,
+Botaurus dubius,,Black-backed Bittern,,yes
 Botaurus poiciloptilus,Matuku hūrepo,Australasian Bittern,,yes
 Brachyramphus marmoratus,,Marbled Murrelet,,yes
 Branta bernicla,,Brant,,yes
@@ -111,8 +111,8 @@ Catharus ustulatus,,Swainson's Thrush,,yes
 Cepphus columba,,Pigeon Guillemot,,yes
 Cereopsis novaehollandiae,Kuihi,Cape Barren Goose,yes,yes
 Ceyx azureus,,Azure Kingfisher,,yes
-Chalcites basalis,,Horsfield's Bronze Cuckoo,,
-Chalcites lucidus,Pīpīwharauroa,Shining Bronze Cuckoo,,
+Chalcites basalis,,Horsfield's Bronze Cuckoo,,yes
+Chalcites lucidus,Pīpīwharauroa,Shining Bronze Cuckoo,,yes
 Chalcophaps longirostris,,Pacific Emerald Dove,,yes
 Charadrius semipalmatus,,Semipalmated Plover,,yes
 Charadrius vociferus,,Killdeer,,yes
@@ -201,7 +201,7 @@ Fulmarus glacialoides,,Southern Fulmar,,
 Gallicolumba luzonica,,Luzon Bleeding-heart,,yes
 Gallinula galeata,,Common Gallinule,,yes
 Gallirallus australis,,Weka,,yes
-Gallirallus philippensis,,Buff-banded Rail,,
+Gallirallus philippensis,,Buff-banded Rail,,yes
 Gallus gallus,Heihei,Red Junglefowl,yes,yes
 Gavia adamsii,,Yellow-billed Loon,,yes
 Gavia immer,,Common Loon,,yes
@@ -222,7 +222,7 @@ Haliastur sphenurus,,Whistling Kite,,yes
 Halobaena caerulea,,Blue Petrel,,yes
 Hemiphaga chathamensis,Parea,Chatham Island Wood Pigeon,,yes
 Hemiphaga novaeseelandiae,,Kererū,,yes
-Heteroscenes pallidus,,Pallid Cuckoo,,
+Heteroscenes pallidus,,Pallid Cuckoo,,yes
 Himantopus leucocephalus,Poaka,Pied Stilt,,yes
 Himantopus mexicanus,,Black-necked Stilt,,yes
 Himantopus novaezelandiae,Kakī,Black Stilt,,yes
@@ -431,8 +431,8 @@ Synoicus chinensis,,Blue-breasted Quail,,yes
 Synoicus ypsilophorus,Koera,Brown Quail,yes,yes
 Syrmaticus reevesii,,Reeves's Pheasant,yes,yes
 Tachybaptus novaehollandiae,,Australasian Grebe,,yes
-Tachyspiza cirrocephala,,Collared Sparrowhawk,,
-Tachyspiza fasciata,,Brown Goshawk,,
+Tachyspiza cirrocephala,,Collared Sparrowhawk,,yes
+Tachyspiza fasciata,,Brown Goshawk,,yes
 Tadorna tadornoides,,Chestnut-breasted Shelduck,,yes
 Tadorna variegata,Pūtangitangi,Paradise Shelduck,,yes
 Taeniopygia guttata,,Zebra Finch,,
@@ -444,12 +444,12 @@ Thalassarche salvini,,Salvin's Mollymawk,,yes
 Thalasseus bergii,,Great Crested Tern,,yes
 Thalasseus maximus,,Royal Tern,,yes
 Thinornis cucullatus,,Hooded Plover,,
-Thinornis melanops,,Black-fronted Dotterel,,
+Thinornis melanops,,Black-fronted Dotterel,,yes
 Thinornis novaeseelandiae,Tūturuatu,Shore Plover,,yes
 Threskiornis molucca,,Australian Ibis,,yes
 Todiramphus sanctus,Kōtare,Sacred Kingfisher,,yes
 Trichoglossus chlorolepidotus,,Scaly-breasted Lorikeet,,yes
-Trichoglossus concinnus,,Musk Lorikeet,,
+Trichoglossus concinnus,,Musk Lorikeet,,yes
 Trichoglossus moluccanus,,Rainbow Lorikeet,yes,
 Tringa brevipes,,Grey-tailed Tattler,,yes
 Tringa flavipes,,Lesser Yellowlegs,,yes
